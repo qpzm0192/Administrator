@@ -1,6 +1,7 @@
 #include <iostream>
 #include "MPRNG.h"
-#include "config.h"
+#include "Config.h"
+#include "Printer.h"
 
 using namespace std;
 
@@ -39,4 +40,15 @@ void uMain::main() {
     processConfigFile(filename, parms);
 
     rng.seed(seed);
+
+    Printer prt(3,2,2);
+
+    prt.print(Printer::Parent, 'S');
+    prt.print(Printer::Parent, 'S');
+    prt.print(Printer::Parent, 'S');
+    prt.print(Printer::Truck, 'S');
+    prt.print(Printer::Parent, 'S');
+    prt.print(Printer::Parent, 'S');
+    prt.print(Printer::Student, 0, 'S', 1, 1);
+    prt.print(Printer::Student, 0, 'F');
 }

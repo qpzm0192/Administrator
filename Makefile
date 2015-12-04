@@ -2,7 +2,7 @@ CXX = u++					# compiler
 CXXFLAGS = -g -multi -Wall -Wno-unused-label -MMD
 MAKEFILE_NAME = ${firstword ${MAKEFILE_LIST}}	# makefile name
 
-OBJECTS = config.o main.o 
+OBJECTS = main.o Config.o Printer.o 
 EXEC = soda
 
 DEPENDS = ${OBJECTS:.o=.d}			# substitute ".o" with ".d"
@@ -14,8 +14,16 @@ DEPENDS = ${OBJECTS:.o=.d}			# substitute ".o" with ".d"
 all : ${EXEC}					# build all executables
 
 ${EXEC} : ${OBJECTS}
-	${CXX} ${CXXFLAGS} $^ -o $@
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
 
+main.o: main.cc
+	${CXX} ${CXXFLAGS} main.cc -c
+
+Config.o: Config.cp
+	${CXX} ${CXXFLAGS} Config.cp -c
+
+Printer.o: Printer.cp
+	${CXX} ${CXXFLAGS} Printer.cp -c		
 
 #############################################################
 
