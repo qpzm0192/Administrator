@@ -2,6 +2,14 @@
 #include "MPRNG.h"
 #include "Config.h"
 #include "Printer.h"
+#include "Bank.h"
+#include "WATCardOffice.h"
+#include "Parent.h"
+#include "Groupoff.h"
+#include "BottlingPlant.h"
+#include "NameServer.h"
+#include "VendingMachine.h"
+#include "Student.h"
 
 using namespace std;
 
@@ -41,14 +49,64 @@ void uMain::main() {
 
     rng.seed(seed);
 
-    Printer prt(3,2,2);
 
-    prt.print(Printer::Parent, 'S');
-    prt.print(Printer::Parent, 'S');
-    prt.print(Printer::Parent, 'S');
-    prt.print(Printer::Truck, 'S');
-    prt.print(Printer::Parent, 'S');
-    prt.print(Printer::Parent, 'S');
-    prt.print(Printer::Student, 0, 'S', 1, 1);
-    prt.print(Printer::Student, 0, 'F');
+    //create tasks
+    Printer *prt = new Printer(parms.numStudents, parms.numVendingMachines, parms.numCouriers);
+
+    Bank *bank = new Bank(parms.numStudents);
+
+    Parent *parent = new Parent(*prt, *bank, parms.numStudents, parms.parentalDelay);
+
+    WATCardOffice *watoff = new WATCardOffice(*prt, *bank, parms.numCouriers);
+
+    Groupoff *groupoff = new Groupoff(*prt, parms.numStudents, parms.sodaCost, parms.groupoffDelay);
+
+    NameServer *nameserver = new NameServer(*prt, parms.numVendingMachines, parms.numStudents);
+
+    VendingMachine *vending[parms.numVendingMachines];
+    for(unsigned int i=0; i < parms.numVendingMachines; i++) {
+        vending[i] = new VendingMachine(*prt, *nameserver, i, parms.sodaCost, 
+            parms.maxStockPerFlavour);
+    }
+
+    BottlingPlant *bottling = new BottlingPlant(*prt, *nameserver, parms.numVendingMachines, 
+        parms.maxShippedPerFlavour, parms.maxStockPerFlavour, parms.timeBetweenShipments);
+
+    Student *stud[parms.numStudents];
+    for(unsigned int i=0; i < parms.numStudents; i++) {
+        stud[i] = new Student(*prt, *nameserver, *watoff, *groupoff, i, parms.maxPurchases);
+    }
+
+    //delete tasks
+    for(unsigned int i=0; i < parms.numStudents; i++) {
+        delete stud[i];
+    }
+
+    cout << "@@@@@@@@@@@@delete stud" << endl;
+
+    delete bottling;
+    cout << "@@@@@@@@@@@@delete bottling" << endl;
+
+    for(unsigned int i=0; i < parms.numVendingMachines; i++) {
+        delete vending[i];
+    }
+    cout << "@@@@@@@@@@@@delete vending" << endl;
+
+    delete nameserver;
+    cout << "@@@@@@@@@@@@delete nameserver" << endl;
+
+    delete groupoff;
+    cout << "@@@@@@@@@@@@delete groupoff" << endl;
+
+    delete watoff;
+    cout << "@@@@@@@@@@@@delete watoff" << endl;
+
+    delete parent;
+    cout << "@@@@@@@@@@@@delete parent" << endl;
+
+    delete bank;
+    cout << "@@@@@@@@@@@@delete bank" << endl;
+
+    delete prt;
+    cout << "@@@@@@@@@@@@delete prt" << endl;
 }

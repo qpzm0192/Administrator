@@ -2,12 +2,14 @@
 #define __WARCARDOFFICE_H__
 
 #include <vector>
+#include <map>
+
+#include "WATCard.h"
 
 using namespace std;
 
 
 _Monitor Printer;
-class WATCard;
 _Monitor Bank;
 
 struct Args {
@@ -28,6 +30,7 @@ _Task WATCardOffice {
     unsigned int numCouriers;
 
     vector<Job> jobVec;
+    map<unsigned int, WATCard *> cardMap;
 
     void main();
   public:

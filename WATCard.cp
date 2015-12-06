@@ -1,4 +1,5 @@
-#include "WATCard.cp"
+#include "WATCard.h"
+#include <uFuture.h>
 
 WATCard::WATCard() : balance(0) {}
 

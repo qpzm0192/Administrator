@@ -7,24 +7,41 @@
 #include "VendingMachine.h"
 #include "MPRNG.h"
 #include "uFuture.h"
+#include "iostream"
+
+using namespace std;
 
 extern MPRNG rng;
 
 Student::Student(Printer &prt, NameServer &nameServer, WATCardOffice &cardOffice, Groupoff &groupoff,
 				unsigned int id, unsigned int maxPurchases)
 				: prt(prt), nameServer(nameServer), cardOffice(cardOffice), groupoff(groupoff), id(id), 
-				maxPurchases(maxPurchases) {
-}
+				maxPurchases(maxPurchases) {}
 
 void Student::main() {
 	unsigned int purchases = rng(1, maxPurchases);
-	unsigned int flavour = rng(0,3);
+
+	VendingMachine::Flavours flavour;
+	switch(rng(0,3)) {
+		case 0:
+			flavour = VendingMachine::Apple;
+			break;
+		case 1:
+			flavour = VendingMachine::Orange;
+			break;
+		case 2:
+			flavour = VendingMachine::Grape;
+			break;
+		case 3:
+			flavour = VendingMachine::Lemon;
+			break;
+	}
+
 	prt.print(Printer::Student, id, 'S', flavour, purchases);
 
 	unsigned int sodaCost;
 
 	WATCard::FWATCard fCard = cardOffice.create(id, 5);
-	WATCard *card = NULL;
 	
 	WATCard::FWATCard fGift = groupoff.giftCard();
 
@@ -39,28 +56,37 @@ void Student::main() {
 
 		// make to purchase 
 		try {
-			for(;;) { // re-attempt puchase without yielding
-				try {
-					if(fGift.available()) { // use giftcard
-						vending->buy(flavour, fGift);
-						prt.print(Printer::Student, id, 'G', fGift.getBlance());
+			cout << "$$$$$$$$$select start" << id << endl;
+			_Select(fGift) {
+				vending->buy(flavour, *(fGift()));
+				prt.print(Printer::Student, id, 'G', fGift()->getBalance());
 
-						fGift.reset();
-					} else if(fCard.available()) { // use watcard
-						vending->buy(flavour, fCard);
-						prt.print(Printer::Student, id, 'B', fCard.getBlance());
+				fGift.reset();
+				cout << "reset" << id << endl;	
+			} or _Select(fCard) {
+				for(;;) {
+					try {
+						vending->buy(flavour, *(fCard()));
+						prt.print(Printer::Student, id, 'B', fCard()->getBalance());
+												
+					} catch(WATCardOffice::Lost) {
+						cout << "!!!!!!!!!!!!!!!!!lost exception " << id << endl;
+						prt.print(Printer::Student, id, 'L');
+						fCard = cardOffice.create(id, 5);
 					}
-					break; // exit inner for			
-				} _Catch(WATCardOffice::Lost) {
-					prt.print(Printer::Student, id, 'L');
-					fCard = cardOffice.create(id, 5);
-				} // inner try
-			} // inner for
+					break;
+				}			
+			}
+			cout << "$$$$$$$$$select end" << id << endl;
+
 			purchases--;
-		} _Catch(VendingMachine::Funds) {
-			cardOffice.transfer(id, 5 + sodaCost, fCard);
-		} _Catch(VendingMachine::Stock) {
+		} catch(VendingMachine::Funds) {
+			cout << "!!!!!!!!!!!!!!!!!fund exception " << id << endl;
+			fCard = cardOffice.transfer(id, 5 + sodaCost, fCard);
+		} catch(VendingMachine::Stock) {
+			cout << "!!!!!!!!!!!!!!!!!stock exception " << id << endl;
 			vending = nameServer.getMachine(id);
+			prt.print(Printer::Student, id, 'V', vending->getId());
 		} // outter try
 	} // outter for
 

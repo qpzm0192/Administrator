@@ -11,7 +11,7 @@ void Printer::flush() {
 		char state = parent.state;
 		cout << state;
 		if(state == 'D') {
-			cout << parent.lid << ',' << parent.value1;
+			cout << parent.value1 << ',' << parent.value2;
 		}
 		parent.valid = false;
 	}
@@ -35,8 +35,8 @@ void Printer::flush() {
 	if(watoff.valid) {
 		char state = watoff.state;
 		cout << state;
-		if(state == 'C' || state == 'S') {
-			cout << watoff.lid << ',' << watoff.value1;
+		if(state == 'C' || state == 'T') {
+			cout << watoff.value1 << ',' << watoff.value2;
 		}
 		watoff.valid = false;
 	}
@@ -49,9 +49,9 @@ void Printer::flush() {
 		char state = names.state;
 		cout << state;
 		if(state == 'R') {
-			cout << names.lid;
+			cout << names.value1;
 		} else if(state == 'N') {
-			cout << names.lid << ',' << names.value1;
+			cout << names.value1 << ',' << names.value2;
 		}
 		names.valid = false;
 	}
@@ -66,7 +66,7 @@ void Printer::flush() {
 		if(state == 'P') {
 			cout << truck.value1;
 		} else if(state == 'd' || state == 'U' || state == 'D') {
-			cout << truck.lid << ',' << truck.value1;
+			cout << truck.value1 << ',' << truck.value2;
 		}
 		truck.valid = false;
 	}
@@ -76,7 +76,7 @@ void Printer::flush() {
 	//plant
 	objectState &plant = osv[5];
 	if(plant.valid) {
-		char state = names.state;
+		char state = plant.state;
 		cout << state;
 		if(state == 'G') {
 			cout << plant.value1;
@@ -94,7 +94,7 @@ void Printer::flush() {
 			if(state == 'S') {
 				cout << os.value1 << ',' <<os.value2;
 			} else if(state == 'V') {
-				cout << os.lid;
+				cout << os.value1;
 			} else if(state == 'G' || state == 'B') {
 				cout << os.value1;
 			}
@@ -126,7 +126,7 @@ void Printer::flush() {
 			char state = os.state;
 			cout << state;
 			if(state == 't' || state == 'T') {
-				cout << os.lid << ',' << os.value1;
+				cout << os.value1 << ',' << os.value2;
 			}
 			os.valid = false;
 		}
@@ -230,13 +230,14 @@ objectState& Printer::getRef(Printer::Kind kind, unsigned int lid) {
 		case Printer::Vending:
 			return osv[6 + numStudents + lid];
 		case Printer::Courier:
-			return osv[6 + numVendingMachines + lid];
+			return osv[6 + numStudents + numVendingMachines + lid];
 		default:
 			return osv[kind];
 	}
 }
 
 void Printer::print(Printer::Kind kind, char state) {
+	//cout << "````````````" << kind << ", " << state << endl;
 	if(state == 'F') {
 		finish(kind);
 	} else {
@@ -251,6 +252,7 @@ void Printer::print(Printer::Kind kind, char state) {
 }
 
 void Printer::print(Printer::Kind kind, char state, int value1) {
+	//cout << "````````````" << kind << ", " << state << ", " << value1 << endl;
 	if(state == 'F') {
 		finish(kind);
 	} else {
@@ -266,6 +268,7 @@ void Printer::print(Printer::Kind kind, char state, int value1) {
 }
 
 void Printer::print(Printer::Kind kind, char state, int value1, int value2) {
+	//cout << "````````````" << kind << ", " << state << ", " << value1 << ", " << value2 << endl;
 	if(state == 'F') {
 		finish(kind);
 	} else {
@@ -282,6 +285,7 @@ void Printer::print(Printer::Kind kind, char state, int value1, int value2) {
 }
 
 void Printer::print(Printer::Kind kind, unsigned int lid, char state) {
+	//cout << "````````````" << kind << ", " << lid << "," << state << endl;
 	if(state == 'F') {
 		finish(kind, lid);
 	} else {
@@ -297,6 +301,7 @@ void Printer::print(Printer::Kind kind, unsigned int lid, char state) {
 }
 
 void Printer::print(Printer::Kind kind, unsigned int lid, char state, int value1) {
+	//cout << "````````````" << kind << ", " << lid << "," << state << ", " << value1 << endl;
 	if(state == 'F') {
 		finish(kind, lid);
 	} else {
@@ -313,6 +318,7 @@ void Printer::print(Printer::Kind kind, unsigned int lid, char state, int value1
 }
 
 void Printer::print(Printer::Kind kind, unsigned int lid, char state, int value1, int value2) {
+	//cout << "````````````" << kind << ", " << lid << "," << state << ", " << value1 << ", " << value2 << endl;
 	if(state == 'F') {
 		finish(kind, lid);
 	} else {
