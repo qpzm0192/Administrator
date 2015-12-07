@@ -38,6 +38,9 @@ void BottlingPlant::main() {
 
     _Accept (~BottlingPlant) {
       isShutDown = true;
+      try {
+        _Accept(getShipment) {}
+      } catch (uMutexFailure::RendezvousFailure) {}
       break;
     }
     or _Accept (getShipment) {

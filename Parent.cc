@@ -2,6 +2,9 @@
 #include "Printer.h"
 #include "WATCard.h"
 #include "MPRNG.h"
+#include "iostream"
+
+using namespace std;
 
 extern MPRNG rng;
 

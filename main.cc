@@ -33,6 +33,7 @@ void uMain::main() {
                 }
             case 2:
                 filename = argv[1];
+                break;
             case 1:
                 filename = "soda.config";
                 break;
@@ -41,11 +42,14 @@ void uMain::main() {
                 
         } //switch  
     } catch(...) {
-        cerr << "Usage: ./soda  config-file  Seed (> 0)" << endl;
+        cerr << "Usage: ./soda [ config-file [ random-seed (> 0) ] ]" << endl;
         return;
     } //try
     
+
     processConfigFile(filename, parms);
+
+    
 
     rng.seed(seed);
 
@@ -82,31 +86,23 @@ void uMain::main() {
         delete stud[i];
     }
 
-    cout << "@@@@@@@@@@@@delete stud" << endl;
-
     delete bottling;
-    cout << "@@@@@@@@@@@@delete bottling" << endl;
 
     for(unsigned int i=0; i < parms.numVendingMachines; i++) {
         delete vending[i];
     }
-    cout << "@@@@@@@@@@@@delete vending" << endl;
 
     delete nameserver;
-    cout << "@@@@@@@@@@@@delete nameserver" << endl;
 
     delete groupoff;
-    cout << "@@@@@@@@@@@@delete groupoff" << endl;
 
     delete watoff;
-    cout << "@@@@@@@@@@@@delete watoff" << endl;
 
     delete parent;
-    cout << "@@@@@@@@@@@@delete parent" << endl;
 
     delete bank;
-    cout << "@@@@@@@@@@@@delete bank" << endl;
 
     delete prt;
-    cout << "@@@@@@@@@@@@delete prt" << endl;
+
+    cout << "********************" << endl;
 }

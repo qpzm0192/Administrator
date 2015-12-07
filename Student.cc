@@ -54,41 +54,39 @@ void Student::main() {
 		if(purchases == 0) break; // exit outter for
 		yield(rng(1,10));
 
-		// make to purchase 
-		try {
-			cout << "$$$$$$$$$select start" << id << endl;
-			_Select(fGift) {
-				vending->buy(flavour, *(fGift()));
-				prt.print(Printer::Student, id, 'G', fGift()->getBalance());
-
-				fGift.reset();
-				cout << "reset" << id << endl;	
-			} or _Select(fCard) {
-				for(;;) {
-					try {
-						vending->buy(flavour, *(fCard()));
-						prt.print(Printer::Student, id, 'B', fCard()->getBalance());
-												
-					} catch(WATCardOffice::Lost) {
-						cout << "!!!!!!!!!!!!!!!!!lost exception " << id << endl;
-						prt.print(Printer::Student, id, 'L');
-						fCard = cardOffice.create(id, 5);
+		// make to purchase
+		try {		
+			_Select(fCard || fGift)	{
+				if(fGift.available()) {
+					// use gift card
+					vending->buy(flavour, *(fGift()));
+					prt.print(Printer::Student, id, 'G', fGift()->getBalance());
+					fGift.reset();
+				} else if(fCard.available()) {
+					for(;;) {
+						try {
+							//use wat card
+							vending->buy(flavour, *(fCard()));
+							prt.print(Printer::Student, id, 'B', fCard()->getBalance());
+							break;							
+						} catch(WATCardOffice::Lost) {
+							prt.print(Printer::Student, id, 'L');
+							fCard = cardOffice.create(id, 5);
+						}
 					}
-					break;
-				}			
-			}
-			cout << "$$$$$$$$$select end" << id << endl;
-
+										
+				}
+			} // if available
 			purchases--;
 		} catch(VendingMachine::Funds) {
-			cout << "!!!!!!!!!!!!!!!!!fund exception " << id << endl;
 			fCard = cardOffice.transfer(id, 5 + sodaCost, fCard);
 		} catch(VendingMachine::Stock) {
-			cout << "!!!!!!!!!!!!!!!!!stock exception " << id << endl;
 			vending = nameServer.getMachine(id);
 			prt.print(Printer::Student, id, 'V', vending->getId());
-		} // outter try
+		} // outter try			
+		
 	} // outter for
 
 	prt.print(Printer::Student, id, 'F');
-}
+} // main
+

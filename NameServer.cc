@@ -54,5 +54,8 @@ void NameServer::main() {
     or _Accept (getMachineList) {}    
   }
 
+  delete vendingMachines;
+  delete students;
+
   prt.print(Printer::NameServer, 'F');
 }

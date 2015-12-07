@@ -26,25 +26,27 @@ void Groupoff::main() {
 		_Accept(~Groupoff) {
 			break;
 		} or _Accept(giftCard) {
-			cout << "^^^^^^^giftcard " << i << endl;
-
+			yield(groupoffDelay);
 			WATCard *c = new WATCard();
 			cardVec.push_back(c);
 
-			yield(groupoffDelay);
-			c->deposit(sodaCost);
-
 			
+			c->deposit(sodaCost);
 
 			prt.print(Printer::Groupoff, 'D', sodaCost);
 			fcardVec[i].delivery(c);
+			
 		}
 	} // for
 
-	for(unsigned int i=0; i < cardVec.size(); i++) {
-		delete cardVec[i];
-	}
+
 
 	prt.print(Printer::Groupoff, 'F');
+}
+
+Groupoff::~Groupoff() {
+	for(unsigned int i=0; i < cardVec.size(); i++) {
+		delete cardVec[i];
+	}	
 }
 

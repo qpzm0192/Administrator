@@ -21,41 +21,41 @@ ${EXEC} : ${OBJECTS}
 main.o: main.cc
 	${CXX} ${CXXFLAGS} main.cc -c
 
-Config.o: Config.cp
-	${CXX} ${CXXFLAGS} Config.cp -c
+Config.o: Config.cc
+	${CXX} ${CXXFLAGS} Config.cc -c
 
-Printer.o: Printer.cp
-	${CXX} ${CXXFLAGS} Printer.cp -c
+Printer.o: Printer.cc
+	${CXX} ${CXXFLAGS} Printer.cc -c
 
-Bank.o: Bank.cp
-	${CXX} ${CXXFLAGS} Bank.cp -c
+Bank.o: Bank.cc
+	${CXX} ${CXXFLAGS} Bank.cc -c
 
-WATCard.o: WATCard.cp
-	${CXX} ${CXXFLAGS} WATCard.cp -c
+WATCard.o: WATCard.cc
+	${CXX} ${CXXFLAGS} WATCard.cc -c
 
-WATCardOffice.o: WATCardOffice.cp
-	${CXX} ${CXXFLAGS} WATCardOffice.cp -c
+WATCardOffice.o: WATCardOffice.cc
+	${CXX} ${CXXFLAGS} WATCardOffice.cc -c
 
-Parent.o: Parent.cp
-	${CXX} ${CXXFLAGS} Parent.cp -c
+Parent.o: Parent.cc
+	${CXX} ${CXXFLAGS} Parent.cc -c
 
-Student.o: Student.cp
-	${CXX} ${CXXFLAGS} Student.cp -c				
+Student.o: Student.cc
+	${CXX} ${CXXFLAGS} Student.cc -c				
 
-Groupoff.o: Groupoff.cp
-	${CXX} ${CXXFLAGS} Groupoff.cp -c
+Groupoff.o: Groupoff.cc
+	${CXX} ${CXXFLAGS} Groupoff.cc -c
 
-BottlingPlant.o: BottlingPlant.cp
-	${CXX} ${CXXFLAGS} BottlingPlant.cp -c
+BottlingPlant.o: BottlingPlant.cc
+	${CXX} ${CXXFLAGS} BottlingPlant.cc -c
 
-NameServer.o: NameServer.cp
-	${CXX} ${CXXFLAGS} NameServer.cp -c
+NameServer.o: NameServer.cc
+	${CXX} ${CXXFLAGS} NameServer.cc -c
 
-Truck.o: Truck.cp
-	${CXX} ${CXXFLAGS} Truck.cp -c
+Truck.o: Truck.cc
+	${CXX} ${CXXFLAGS} Truck.cc -c
 
-VendingMachine.o: VendingMachine.cp
-	${CXX} ${CXXFLAGS} VendingMachine.cp -c				
+VendingMachine.o: VendingMachine.cc
+	${CXX} ${CXXFLAGS} VendingMachine.cc -c				
 #############################################################
 
 ${OBJECTS} : ${MAKEFILE_NAME}			# OPTIONAL : changes to this file => recompile

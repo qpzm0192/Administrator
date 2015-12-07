@@ -1,9 +1,6 @@
 #include "Truck.h"
 #include "BottlingPlant.h"
 #include "MPRNG.h"
-#include <iostream>
-
-using namespace std;
 
 extern MPRNG rng;
 
@@ -71,6 +68,6 @@ void Truck::main() {
       }
     }
   }
-  catch (BottlingPlant::Shutdown) { cout << "shutdown" << endl;}
+  catch (BottlingPlant::Shutdown) {}
   prt.print(Printer::Truck, 'F');
 }

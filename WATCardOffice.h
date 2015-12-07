@@ -15,6 +15,7 @@ _Monitor Bank;
 struct Args {
     unsigned int sid;
     unsigned int amount;
+    unsigned int lastBal;
 };
 
 _Task WATCardOffice {
@@ -31,6 +32,7 @@ _Task WATCardOffice {
 
     vector<Job> jobVec;
     map<unsigned int, WATCard *> cardMap;
+    bool del = false;
 
     void main();
   public:
