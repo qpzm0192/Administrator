@@ -49,16 +49,22 @@ The parent prints the following information:
   State     |Meaning          |Additional  Information
   ----------------------------------------------------
   S         |starting         |
+  ----------------------------------------------------
   D s,g     |deposit gift     |student s receiving gift, amount of gift g
+  ----------------------------------------------------
   F         |finished         |
+  ----------------------------------------------------
 
 
 The groupoff prints the following information:
   State     |Meaning          |Additional  Information
   ----------------------------------------------------
   S         |starting         |
+  ----------------------------------------------------
   D g       |deposit gift     |amount of gift g
+  ----------------------------------------------------
   F         |finished         |
+  ----------------------------------------------------
 
 
 The WATCard office prints the following information:
